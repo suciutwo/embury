@@ -3,7 +3,7 @@ $dark-color: #C0392B;
 $text-color: #FFFFFF;
 
 .navbar-inverse { background-color: $light-color}
-.navbar-inverse .navbar-nav>.active>a:hover,.navbar-inverse .navbar-nav>li>a:hover, .navbar-inverse .navbar-nav>li>a:focus { background-color: #dark-color}
+.navbar-inverse .navbar-nav>.active>a:hover,.navbar-inverse .navbar-nav>li>a:hover, .navbar-inverse .navbar-nav>li>a:focus { background-color: $dark-color}
 .navbar-inverse .navbar-nav>.active>a,.navbar-inverse .navbar-nav>.open>a,.navbar-inverse .navbar-nav>.open>a, .navbar-inverse .navbar-nav>.open>a:hover,.navbar-inverse .navbar-nav>.open>a, .navbar-inverse .navbar-nav>.open>a:hover, .navbar-inverse .navbar-nav>.open>a:focus { background-color: $light-color}
 .dropdown-menu { background-color: $light-color}
 .dropdown-menu>li>a:hover, .dropdown-menu>li>a:focus { background-color: $dark-color}
