@@ -7,3 +7,4 @@ dist
 emburyenv
 emburyenv*
 .sass-cache
+.idea
