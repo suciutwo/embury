@@ -4,14 +4,8 @@ block content
   .container.starter-template
     h1 Welcome to Embury
       p.lead A database of #{cocktailCount}.
-
-    p  Here's some more stuff.
-    p  I could talk for hours.
-    p  Just going to keep going.
-    p  I could talk for hours.
-    p  Just going to keep going.
-    p  I could talk for hours.
-    p  Just going to keep going.
+    each name in allnames
+      p= name
 
     h1#about About
       p.lead David A. Embury was a careful man.
