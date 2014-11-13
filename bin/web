@@ -1,0 +1,10 @@
+#!/bin/sh
+
+if [ "$FLASK_ENV" == "development" ]; then
+    echo 'dev mode'
+    python embury.py
+else
+    echo 'prod mode'
+    gunicorn embury:app --log-file=-
+fi
+

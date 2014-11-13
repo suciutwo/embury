@@ -1,8 +1,10 @@
+import os
 from flask import Flask, render_template
 from src.data_processing.matrix_generation import recipe_data
 
 
 app = Flask(__name__)
+app.config['DEBUG'] = os.environ.get('DEBUG', False)
 app.jinja_env.add_extension('pyjade.ext.jinja.PyJadeExtension')
 
 

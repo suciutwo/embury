@@ -1,1 +1,1 @@
-web: gunicorn embury:app --log-file=-
+web: bin/web
