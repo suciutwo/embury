@@ -1,5 +1,7 @@
-import os
-from flask import Flask, render_template
+import os, random
+from flask import Flask
+from flask import render_template
+from flask import request
 from src.data_processing.matrix_generation import recipe_data
 
 
@@ -10,10 +12,20 @@ app.jinja_env.add_extension('pyjade.ext.jinja.PyJadeExtension')
 
 @app.route('/')
 def index():
-    allrecipes = recipe_data(None)
-    allnames = [item[0] for item in allrecipes.iterrows()]
-    return render_template('index.jade', cocktailCount=len(allrecipes),
-                           allnames=allnames)
+    all_recipes = recipe_data(None)
+    all_names = [item[0] for item in all_recipes.iterrows()]
+    return render_template('index.jade', cocktail_count=len(all_recipes),
+                           allnames=all_names)
+
+@app.route('/search')
+def search():
+    print "Searching"
+    print request.args
+
+
+@app.errorhandler(404)
+def page_not_found(error):
+    return render_template('404.jade'), 404
 
 
 if __name__ == '__main__':
