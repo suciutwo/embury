@@ -1,8 +1,42 @@
 body {
-    padding-top: 50px;
     background: #272822;
+    margin: 30px auto;
 }
+
 .starter-template {
     padding: 40px 15px;
     text-align: center;
+}
+
+.container {
+  margin: auto;
+}
+
+.col-centered{
+    float: none;
+}
+
+a {
+  color: #C0392B;
+}
+
+a:hover {
+  color: #C0392B;
+}
+
+h1 {
+  color: #C0392B;
+}
+
+p {
+  color: darkgray;
+}
+
+.fix {
+  max-width: 500px;
+  margin: 30px auto;
+}
+
+h3 {
+  color: darkgray;
 }

@@ -2,18 +2,12 @@ extends ./header.jade
 
 block content
   .container.starter-template
-    h1 Welcome to Embury
-      p.lead A database of #{cocktail_count}.
-    each name in allnames
-      p= name
-
-    h1#about About
-      p.lead David A. Embury was a careful man.
-
-    p He was a lawyer.
-    p But he became a bartender.
-    p By writing a picky book.
-    p About how to make drinks.
-
-    h1#contact Contact
-      p.lead Wait here. I'll be back in a minute.
+    h3 At home, you have:
+    each ingredient in ingredients
+      p= ingredient
+    h3 You don't have:
+    each ingredient in missingIngredients
+      p= ingredient
+    h3 I suggest:
+    each cocktail in allCocktails
+      p= cocktail

@@ -14,8 +14,16 @@ app.jinja_env.add_extension('pyjade.ext.jinja.PyJadeExtension')
 def index():
     all_recipes = recipe_data(None)
     all_names = [item[0] for item in all_recipes.iterrows()]
-    return render_template('index.jade', cocktail_count=len(all_recipes),
-                           allnames=all_names)
+    return render_template('index.jade',
+                           ingredients=all_names[5:10],
+                           missingIngredients=all_names[0:5],
+                           allCocktails=all_names)
+
+
+@app.route('/about/')
+def about():
+    return render_template('about.jade')
+
 
 @app.route('/search')
 def search():
