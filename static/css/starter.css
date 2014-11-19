@@ -38,5 +38,37 @@ p {
 }
 
 h3 {
-  color: darkgray;
+  color: #C0392B;
 }
+
+.btn-flat {
+  color: white;
+  background-image: none;
+  background: #E74C3C;
+  border-color: #E74C3C;
+  -webkit-box-shadow: none;
+}
+
+.btn-flat:hover {
+  color: white;
+  background-image: none;
+  background: #C0392B;
+  border-color: #C0392B;
+  -webkit-box-shadow: none;
+}
+
+.btn-flat:active {
+  color: white;
+  outline: none;
+}
+
+.btn-flat:active:hover {
+  color: white;
+  outline: none;
+}
+
+.btn-flat:focus {
+  color: white;
+  outline: none;
+}
+
