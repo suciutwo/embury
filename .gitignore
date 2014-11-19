@@ -1,10 +1,4 @@
-.DS_Store
 *.pyc
-*.pyo
-dist
-*.egg
-*.egg-info
 emburyenv
-emburyenv*
 .sass-cache
 .idea
