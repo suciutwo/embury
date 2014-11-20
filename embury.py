@@ -1,7 +1,9 @@
 import os
+import random
 from flask import Flask
 from flask import render_template
 from flask import jsonify
+from flask import request
 from src.CocktailDirectory import CocktailDirectory
 
 
@@ -13,12 +15,7 @@ c = CocktailDirectory()
 
 @app.route('/')
 def index():
-    all_ingredients = c.all_ingredients()
-    all_names = [name for name, recipe in c.search()]
-    return render_template('index.jade',
-                           ingredients=all_ingredients[5:10],
-                           missingIngredients=all_ingredients[0:5],
-                           allCocktails=all_names[0:5])
+    return render_template('index.jade')
 
 
 @app.route('/about/')
@@ -28,7 +25,10 @@ def about():
 
 @app.route('/search/')
 def search():
-    random_selection = c.random_drinks(5)
+    forbidden = request.args.getlist('forbidden[]')
+    required = request.args.getlist('required[]')
+    result = c.search(required=required, forbidden=forbidden)
+    random_selection = random.sample(result, 10)
     processed_drinks = []
     for name, recipe in random_selection:
         ingredients = [ingredient_name for ingredient_name, amount in recipe]

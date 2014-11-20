@@ -2,17 +2,21 @@ extends ./header.jade
 
 block content
   .container.starter-template
-    button.btn.btn-flat#search Shake
+    .row
+      .col-sm-3
+        input.form-control#missinginput(type="text") But you don't have...
+      .col-sm-1
+        button.btn.btn-flat#missingbutton Don't Have
+      .col-sm-8
+
     .row
       .col-sm-4
         h3 You don't have
-        each ingredient in missingIngredients
-          p= ingredient
+        #missing
       .col-sm-4
         h3#suggestionHeader I recommend
         #suggestions
-          each cocktail in allCocktails
-            p= cocktail
+        button.btn.btn-flat#search Shake
       .col-sm-4
         h3#drinkName
         #drinkIngredients
