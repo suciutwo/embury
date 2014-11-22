@@ -4,15 +4,13 @@ block content
   .container.starter-template
     .row
       .col-sm-3
-        input.form-control#missinginput(type="text") But you don't have...
+        input.form-control#haveinput(type="text", placeholder="You have")
       .col-sm-1
-        button.btn.btn-flat#missingbutton Don't Have
+        button.btn.btn-flat#havebutton On your shelf
       .col-sm-8
-
     .row
       .col-sm-4
-        h3 You don't have
-        #missing
+        #have
       .col-sm-4
         h3#suggestionHeader I recommend
         #suggestions
@@ -20,6 +18,21 @@ block content
       .col-sm-4
         h3#drinkName
         #drinkIngredients
+    .row
+      .col-sm-3
+        input.form-control#missinginput(type="text", placeholder="But you don't have...")
+      .col-sm-1
+        button.btn.btn-flat#missingbutton Off your shelf
+      .col-sm-8
+    .row
+      .col-sm-4
+        #missing
+      .col-sm-4
+        h3#buyMoreHeader If you bought
+        #buy
+      .col-sm-4
+        h3#drinkName2
+        #drinkIngredients2
 
 block scripts
   script(src="/static/js/search.js")

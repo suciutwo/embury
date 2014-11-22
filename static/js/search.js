@@ -1,7 +1,11 @@
 $( document ).ready(function() {
 
     var drinkTemplate = Hogan.compile(
-        '<p class=drink data-ingredients="{{data}}">{{drink}}</p>'
+        '<p class=drink>{{drink}}</p>'
+    );
+
+    var suggestedDrinkTemplate = Hogan.compile(
+        '<p class=suggesteddrink>{{drink}}</p>'
     );
 
     var ingredientTemplate = Hogan.compile(
@@ -12,9 +16,20 @@ $( document ).ready(function() {
         '<p class=missingitem>{{missing}}</p>'
     );
 
+    var ownedTemplate = Hogan.compile(
+        '<p class=haveitem>{{owned}}</p>'
+    );
+
     function appendMissing(missing) {
         $('#missing').append(missingTemplate.render({missing: missing}));
         $('.missingitem').click(function() {
+            $(this).remove()
+        });
+    }
+
+    function appendOwned(owned) {
+        $('#have').append(ownedTemplate.render({owned: owned}));
+        $('.haveitem').click(function() {
             $(this).remove()
         });
     }
@@ -26,31 +41,37 @@ $( document ).ready(function() {
         }).get();
     }
 
+    function getOwnedIngredients() {
+        return $('.haveitem').map(function () {
+            return $(this).text();
+        }).get();
+    }
+
 
     $('#search').click(function() {
         var suggestionBox = $('#suggestions');
         suggestionBox.empty();
         var forbidden = getMissingIngredients();
+        var owned = getOwnedIngredients();
         $.ajax({
             url: '/search/',
             data: {
                    forbidden: forbidden
             },
             success: function(response) {
-                $.map(response.drinks, function(drink) {
+                $.map(response.cocktails, function(cocktail) {
                   suggestionBox.append(
-                    drinkTemplate.render({drink: drink.name,
-                     data:drink.ingredients})
+                    $(drinkTemplate.render({drink: cocktail.name}))
+                        .data("recipe", cocktail.recipe)
                   );
                 });
                 $('.drink').click(function() {
                   $('#drinkName').text($(this).text());
                   var ingredientBox = $('#drinkIngredients').empty();
-                  var ingredients = $(this).attr('data-ingredients');
-                  ingredients = ingredients.split(',');
-                  $.map(ingredients, function(ingredient) {
+                  var instructions = $(this).data("recipe");
+                  $.map(instructions, function(instruction) {
                     ingredientBox.append(
-                        ingredientTemplate.render({ingredient: ingredient})
+                        ingredientTemplate.render({ingredient: instruction.ingredient})
                     );
                   });
                   $('.ingredient').click(function() {
@@ -62,10 +83,56 @@ $( document ).ready(function() {
                 console.log(error);
             }
         });
+
+
+        var buyMoreBox = $('#buy');
+        buyMoreBox.empty();
+        $.ajax({
+                url: '/suggest/',
+                data: {
+                    owned: owned
+                },
+                success: function(response) {
+                    $('#buyMoreHeader').text("If you bought " + response.tobuy);
+
+                    $.map(response.cocktails, function(cocktail) {
+                        buyMoreBox.append(
+                            $(suggestedDrinkTemplate.render({drink: cocktail.name}))
+                                .data("recipe", cocktail.recipe)
+                        );
+                    });
+                    $('.suggesteddrink').click(function() {
+                        $('#drinkName2').text($(this).text());
+                        var ingredientBox = $('#drinkIngredients2').empty();
+                        var ingredients = $(this).data("recipe");
+                        $.map(ingredients, function(instruction) {
+                            ingredientBox.append(
+                                ingredientTemplate.render({ingredient: instruction.ingredient})
+                            );
+                        });
+                        $('.ingredient').click(function() {
+                            appendMissing($(this).text())
+                        });
+                    });
+                },
+                error: function(error) {
+                    console.log(error);
+                }
+            }
+        );
+
     });
 
 
     $('#missingbutton').click(function() {
-        appendMissing($('#missinginput').val());
+        var input = $('#missinginput');
+        appendMissing(input.val());
+        input.val('');
+    });
+
+    $('#havebutton').click(function() {
+        var input = $('#haveinput');
+        appendOwned(input.val());
+        input.val('');
     });
 });

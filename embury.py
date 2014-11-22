@@ -1,5 +1,8 @@
+#!/Users/andrewbackup/Desktop/embury/emburyenv/bin/python
+
 import os
 import random
+import json
 from flask import Flask
 from flask import render_template
 from flask import jsonify
@@ -29,11 +32,20 @@ def search():
     required = request.args.getlist('required[]')
     result = c.search(required=required, forbidden=forbidden)
     random_selection = random.sample(result, 10)
-    processed_drinks = []
-    for name, recipe in random_selection:
-        ingredients = [ingredient_name for ingredient_name, amount in recipe]
-        processed_drinks.append({"name": name, "ingredients": ingredients})
-    return jsonify(drinks=processed_drinks)
+    return jsonify(cocktails=[s._asdict() for s in random_selection])
+
+
+@app.route('/suggest/')
+def suggest():
+    owned = request.args.getlist('owned[]')
+    result = c.flexible_search(liquor_on_shelf=owned, allowed_missing_elements=1)
+    suggestions = []
+    tobuy = "I can't seem to find another drink you could make by buying a single ingredient."
+    if result:
+        [tobuy, suggestions] = result[0]
+        tobuy = ', '.join(tobuy)
+        suggestions = [c.cocktail(name)._asdict() for name in suggestions]
+    return jsonify(cocktails=suggestions, tobuy=tobuy)
 
 
 @app.errorhandler(404)
