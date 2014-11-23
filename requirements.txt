@@ -4,7 +4,7 @@ MarkupSafe==0.23
 Werkzeug==0.9.6
 numpy==1.8.1
 scipy==0.14.0
-https://s3.amazonaws.com/suciutwo/cocktails/cocktails-0.3.tar.gz
+https://s3.amazonaws.com/suciutwo/cocktails/cocktails-0.4.tar.gz
 gunicorn==19.1.1
 itsdangerous==0.24
 pyjade==3.0.0
