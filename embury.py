@@ -26,6 +26,11 @@ def about():
     return render_template('about.jade')
 
 
+@app.route('/ingredients/')
+def ingredients():
+    return jsonify(ingredients=c.all_ingredients())
+
+
 @app.route('/search/')
 def search():
     owned = request.args.getlist('owned[]')

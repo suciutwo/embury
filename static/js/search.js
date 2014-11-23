@@ -147,19 +147,58 @@ $( document ).ready(function() {
     $('#missingbutton').click(function() {
         var input = $('#missinginput');
         appendMissing(input.val());
-        input.val('');
+        input.typeahead('val', '');
     });
 
     $('#havebutton').click(function() {
         var input = $('#haveinput');
         appendOwned(input.val());
-        input.val('');
+        input.typeahead('val', '');
     });
 
     $('#wantbutton').click(function() {
         var input = $('#wantinput');
         appendWanted(input.val());
-        input.val('');
+        input.typeahead('val', '');
     });
+
+
+    window.ingredientList = new Bloodhound({
+        datumTokenizer: Bloodhound.tokenizers.obj.whitespace('value'),
+        queryTokenizer: Bloodhound.tokenizers.whitespace,
+        limit: 15,
+        prefetch: {
+            url: '/ingredients/',
+            filter: function(data) {
+                return $.map(data.ingredients, function(ingredient) {return {value:ingredient};});
+            }
+        }
+    });
+    ingredientList.initialize();
+
+    $('.typeahead').typeahead({
+            hint: true,
+            highlight: true,
+            minLength: 1
+        },
+        {
+            name: 'ingredients',
+            displayKey: 'value',
+            source: ingredientList.ttAdapter()
+        }
+    );
+
+    $("#haveinput").on('typeahead:selected', function(e, data) {
+        $('#havebutton').click();
+    });
+
+    $("#wantinput").on('typeahead:selected', function(e, data) {
+        $('#wantbutton').click();
+    });
+
+    $("#missinginput").on('typeahead:selected', function(e, data) {
+        $('#missingbutton').click();
+    });
+
 
 });
