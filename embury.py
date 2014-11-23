@@ -28,10 +28,13 @@ def about():
 
 @app.route('/search/')
 def search():
+    owned = request.args.getlist('owned[]')
     forbidden = request.args.getlist('forbidden[]')
     required = request.args.getlist('required[]')
-    result = c.search(required=required, forbidden=forbidden)
-    random_selection = random.sample(result, 10)
+    print owned, forbidden, required
+    result = c.search(owned=owned, required=required, forbidden=forbidden)
+    number_to_return = min(10, len(result))
+    random_selection = random.sample(result, number_to_return)
     return jsonify(cocktails=[s._asdict() for s in random_selection])
 
 

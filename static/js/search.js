@@ -20,6 +20,10 @@ $( document ).ready(function() {
         '<p class=haveitem>{{owned}}</p>'
     );
 
+    var wantedTemplate = Hogan.compile(
+        '<p class=wantitem>{{want}}</p>'
+    );
+
     function appendMissing(missing) {
         $('#missing').append(missingTemplate.render({missing: missing}));
         $('.missingitem').click(function() {
@@ -30,6 +34,13 @@ $( document ).ready(function() {
     function appendOwned(owned) {
         $('#have').append(ownedTemplate.render({owned: owned}));
         $('.haveitem').click(function() {
+            $(this).remove()
+        });
+    }
+
+    function appendWanted(wanted) {
+        $('#want').append(wantedTemplate.render({want: wanted}));
+        $('.wantitem').click(function() {
             $(this).remove()
         });
     }
@@ -47,16 +58,25 @@ $( document ).ready(function() {
         }).get();
     }
 
+    function getWantedIngredients() {
+        return $('.wantitem').map(function () {
+            return $(this).text();
+        }).get();
+    }
+
 
     $('#search').click(function() {
         var suggestionBox = $('#suggestions');
         suggestionBox.empty();
         var forbidden = getMissingIngredients();
         var owned = getOwnedIngredients();
+        var wanted = getWantedIngredients();
         $.ajax({
             url: '/search/',
             data: {
-                   forbidden: forbidden
+                   owned: owned,
+                   forbidden: forbidden,
+                   required: wanted
             },
             success: function(response) {
                 $.map(response.cocktails, function(cocktail) {
@@ -135,4 +155,11 @@ $( document ).ready(function() {
         appendOwned(input.val());
         input.val('');
     });
+
+    $('#wantbutton').click(function() {
+        var input = $('#wantinput');
+        appendWanted(input.val());
+        input.val('');
+    });
+
 });

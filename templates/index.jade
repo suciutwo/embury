@@ -4,15 +4,15 @@ block content
   .container.starter-template
     .row
       .col-sm-3
-        input.form-control#haveinput(type="text", placeholder="You have")
+        input.form-control#haveinput(type="text", placeholder="You have...")
       .col-sm-1
-        button.btn.btn-flat#havebutton On your shelf
+        button.btn.btn-flat#havebutton On Your Shelf
       .col-sm-8
     .row
       .col-sm-4
         #have
       .col-sm-4
-        h3#suggestionHeader I recommend
+        h3#suggestionHeader You can make
         #suggestions
         button.btn.btn-flat#search Shake
       .col-sm-4
@@ -20,19 +20,29 @@ block content
         #drinkIngredients
     .row
       .col-sm-3
-        input.form-control#missinginput(type="text", placeholder="But you don't have...")
+        input.form-control#wantinput(type="text", placeholder="And you definitely want to use...")
       .col-sm-1
-        button.btn.btn-flat#missingbutton Off your shelf
+        button.btn.btn-flat#wantbutton In Your Drink
       .col-sm-8
     .row
       .col-sm-4
-        #missing
+        #want
       .col-sm-4
-        h3#buyMoreHeader If you bought
+        h3#buyMoreHeader
         #buy
       .col-sm-4
         h3#drinkName2
         #drinkIngredients2
+    .row
+      .col-sm-3
+        input.form-control#missinginput(type="text", placeholder="But you hate...")
+      .col-sm-1
+        button.btn.btn-flat#missingbutton Off Your Shelf
+      .col-sm-8
+    .row
+      .col-sm-4
+        #missing
+      .col-sm-8
 
 block scripts
   script(src="/static/js/search.js")
