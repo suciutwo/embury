@@ -29,7 +29,12 @@ h1 {
 }
 
 p {
-  color: darkgray;
+  color: lightgray;
+}
+
+span.recipe {
+    color: darkgray;
+    padding-left: 1em;
 }
 
 .fix {

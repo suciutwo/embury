@@ -2,20 +2,20 @@ window.onload = function() {
     $(document).ready(function () {
 
         var drinkTemplate = Hogan.compile(
-            '<p class=drink>{{drink}}</p>'
+            '<p class=drink>{{drink}}<span class="recipe">{{ingredients}}</span></p>'
         );
 
         var suggestedDrinkTemplate = Hogan.compile(
-            '<p class=suggesteddrink>{{drink}}</p>'
+            '<p class=suggesteddrink>{{drink}}<span class="recipe">{{ingredients}}</span></p>'
         );
 
-        var ingredientTemplate = Hogan.compile(
-            '<p class=ingredient>{{ingredient}}</p>'
-        );
+        //var ingredientTemplate = Hogan.compile(
+        //    '<p class=ingredient>{{ingredient}}</p>'
+        //);
 
-        var missingTemplate = Hogan.compile(
-            '<p class=missingitem>{{missing}}</p>'
-        );
+        //var missingTemplate = Hogan.compile(
+        //    '<p class=missingitem>{{missing}}</p>'
+        //);
 
         var ownedTemplate = Hogan.compile(
             '<p class=haveitem>{{owned}}</p>'
@@ -25,12 +25,12 @@ window.onload = function() {
             '<p class=wantitem>{{want}}</p>'
         );
 
-        function appendMissing(missing) {
-            $('#missing').append(missingTemplate.render({missing: missing}));
-            $('.missingitem').click(function () {
-                $(this).remove()
-            });
-        }
+        //function appendMissing(missing) {
+        //    $('#missing').append(missingTemplate.render({missing: missing}));
+        //    $('.missingitem').click(function () {
+        //        $(this).remove()
+        //    });
+        //}
 
         function appendOwned(owned) {
             $('#have').append(ownedTemplate.render({owned: owned}));
@@ -47,11 +47,11 @@ window.onload = function() {
         }
 
 
-        function getMissingIngredients() {
-            return $('.missingitem').map(function () {
-                return $(this).text();
-            }).get();
-        }
+        //function getMissingIngredients() {
+        //    return $('.missingitem').map(function () {
+        //        return $(this).text();
+        //    }).get();
+        //}
 
         function getOwnedIngredients() {
             return $('.haveitem').map(function () {
@@ -65,40 +65,42 @@ window.onload = function() {
             }).get();
         }
 
-
         $('#search').click(function () {
             var suggestionBox = $('#suggestions');
             suggestionBox.empty();
-            var forbidden = getMissingIngredients();
-            var owned = getOwnedIngredients();
+            //var forbidden = getMissingIngredients();
             var wanted = getWantedIngredients();
+            var owned = getOwnedIngredients().concat(wanted);
+            console.log(owned);
             $.ajax({
                 url: '/search/',
                 data: {
                     owned: owned,
-                    forbidden: forbidden,
+                    //forbidden: forbidden,
                     required: wanted
                 },
                 success: function (response) {
                     $.map(response.cocktails, function (cocktail) {
+                        var ingredientString = $.map(cocktail.recipe, function(d) { return d.ingredient; })
+                            .join(', ');
                         suggestionBox.append(
-                            $(drinkTemplate.render({drink: cocktail.name}))
-                                .data("recipe", cocktail.recipe)
+                            $(drinkTemplate.render({drink: cocktail.name,
+                            ingredients: ingredientString}))
                         );
                     });
-                    $('.drink').click(function () {
-                        $('#drinkName').text($(this).text());
-                        var ingredientBox = $('#drinkIngredients').empty();
-                        var instructions = $(this).data("recipe");
-                        $.map(instructions, function (instruction) {
-                            ingredientBox.append(
-                                ingredientTemplate.render({ingredient: instruction.ingredient})
-                            );
-                        });
-                        $('.ingredient').click(function () {
-                            appendMissing($(this).text())
-                        });
-                    });
+                    //$('.drink').click(function () {
+                    //    $('#drinkName').text($(this).text());
+                    //    var ingredientBox = $('#drinkIngredients').empty();
+                    //    var instructions = $(this).data("recipe");
+                    //    $.map(instructions, function (instruction) {
+                    //        ingredientBox.append(
+                    //            ingredientTemplate.render({ingredient: instruction.ingredient})
+                    //        );
+                    //    });
+                    //    $('.ingredient').click(function () {
+                    //        appendMissing($(this).text())
+                    //    });
+                    //});
                 },
                 error: function (error) {
                     console.log(error);
@@ -117,24 +119,26 @@ window.onload = function() {
                         $('#buyMoreHeader').text("If you bought " + response.tobuy);
 
                         $.map(response.cocktails, function (cocktail) {
+                            var ingredientString = $.map(cocktail.recipe, function(d) { return d.ingredient; })
+                                .join(', ');
                             buyMoreBox.append(
-                                $(suggestedDrinkTemplate.render({drink: cocktail.name}))
-                                    .data("recipe", cocktail.recipe)
+                                $(suggestedDrinkTemplate.render({drink: cocktail.name,
+                                    ingredients: ingredientString}))
                             );
                         });
-                        $('.suggesteddrink').click(function () {
-                            $('#drinkName2').text($(this).text());
-                            var ingredientBox = $('#drinkIngredients2').empty();
-                            var ingredients = $(this).data("recipe");
-                            $.map(ingredients, function (instruction) {
-                                ingredientBox.append(
-                                    ingredientTemplate.render({ingredient: instruction.ingredient})
-                                );
-                            });
-                            $('.ingredient').click(function () {
-                                appendMissing($(this).text())
-                            });
-                        });
+                        //$('.suggesteddrink').click(function () {
+                        //    $('#drinkName2').text($(this).text());
+                        //    var ingredientBox = $('#drinkIngredients2').empty();
+                        //    var ingredients = $(this).data("recipe");
+                        //    $.map(ingredients, function (instruction) {
+                        //        ingredientBox.append(
+                        //            ingredientTemplate.render({ingredient: instruction.ingredient})
+                        //        );
+                        //    });
+                        //    $('.ingredient').click(function () {
+                        //        appendMissing($(this).text())
+                        //    });
+                        //});
                     },
                     error: function (error) {
                         console.log(error);
@@ -145,11 +149,11 @@ window.onload = function() {
         });
 
 
-        $('#missingbutton').click(function () {
-            var input = $('#missinginput');
-            appendMissing(input.val());
-            input.typeahead('val', '');
-        });
+        //$('#missingbutton').click(function () {
+        //    var input = $('#missinginput');
+        //    appendMissing(input.val());
+        //    input.typeahead('val', '');
+        //});
 
         $('#havebutton').click(function () {
             var input = $('#haveinput');
@@ -199,9 +203,9 @@ window.onload = function() {
             $('#wantbutton').click();
         });
 
-        $("#missinginput").on('typeahead:selected', function (e, data) {
-            $('#missingbutton').click();
-        });
+        //$("#missinginput").on('typeahead:selected', function (e, data) {
+        //    $('#missingbutton').click();
+        //});
 
 
     });
