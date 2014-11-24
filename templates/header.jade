@@ -7,8 +7,8 @@ html(lang="en")
     meta(name="description", content="")
     meta(name="author", content="")
     title Embury
-    link(href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.0/css/bootstrap.min.css" rel="stylesheet")
-    link(href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.0/css/bootstrap-theme.min.css" rel="stylesheet")
+    link(href="/static/vendor/bootstrap.min.css" rel="stylesheet")
+    link(href="/static/vendor/bootstrap-theme.min.css" rel="stylesheet")
     link(href="/static/css/navbar.css" rel="stylesheet")
     link(href="/static/css/starter.css" rel="stylesheet")
   body
@@ -26,8 +26,5 @@ html(lang="en")
             li
               a(href="/about/") About
     block content
-    script(src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js")
-    script(src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.0/js/bootstrap.min.js")
-    script(src="//cdnjs.cloudflare.com/ajax/libs/hogan.js/3.0.2/hogan.min.js")
-    script(src="//cdnjs.cloudflare.com/ajax/libs/typeahead.js/0.10.4/typeahead.bundle.js")
+    script(src="/static/js/load-resources.js")
     block scripts
