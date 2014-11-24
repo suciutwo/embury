@@ -3,46 +3,43 @@ extends ./header.jade
 block content
   .container.starter-template
     .row
+      .col-sm-4
       .col-sm-3
         input.typeahead.form-control#haveinput(type="text", placeholder="You have...")
       .col-sm-1
         button.btn.btn-flat#havebutton On Your Shelf
-      .col-sm-8
+      .col-sm-4
+    .row
+      .col-sm-12
+        #have
     .row
       .col-sm-4
-        #have
+      .col-sm-3
+        input.typeahead.form-control#wantinput(type="text", placeholder="You want to use...")
+      .col-sm-1
+        button.btn.btn-flat#wantbutton In Your Drink
+      .col-sm-8
+    .row
+      .col-sm-12
+        #want
+    .row
       .col-sm-4
-        h3#suggestionHeader You can make
+      .col-sm-4
+        h3#suggestionHeader Make
         #suggestions
         button.btn.btn-flat#search Shake
       .col-sm-4
         h3#drinkName
         #drinkIngredients
     .row
-      .col-sm-3
-        input.typeahead.form-control#wantinput(type="text", placeholder="And you definitely want to use...")
-      .col-sm-1
-        button.btn.btn-flat#wantbutton In Your Drink
-      .col-sm-8
-    .row
       .col-sm-4
-        #want
       .col-sm-4
         h3#buyMoreHeader
         #buy
       .col-sm-4
         h3#drinkName2
         #drinkIngredients2
-    .row
-      .col-sm-3
-        input.typeahead.form-control#missinginput(type="text", placeholder="But you hate...")
-      .col-sm-1
-        button.btn.btn-flat#missingbutton Off Your Shelf
-      .col-sm-8
-    .row
-      .col-sm-4
-        #missing
-      .col-sm-8
+
 
 block scripts
   script(src="/static/js/search.js")
