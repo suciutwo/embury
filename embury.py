@@ -2,7 +2,6 @@
 
 import os
 import random
-import json
 from flask import Flask
 from flask import render_template
 from flask import jsonify
@@ -57,7 +56,7 @@ def suggest():
 
 
 @app.errorhandler(404)
-def page_not_found(error):
+def page_not_found():
     return render_template('404.jade'), 404
 
 
