@@ -16,13 +16,27 @@ body {
     float: none;
 }
 
-a {
-  color: #C0392B;
+a:link {
+  color: lightgray;
 }
 
-a:hover {
-  color: #C0392B;
+a:visited {
+    color: lightgray;
 }
+
+a:hover  {
+    color: darkgray;
+}
+
+a:active {
+  color: darkgray;
+}
+
+/*a:hover:visited {*/
+    /*color: darkgray;*/
+/*}*/
+
+
 
 h1 {
   color: #C0392B;

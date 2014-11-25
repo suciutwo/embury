@@ -2,11 +2,11 @@ window.onload = function() {
     $(document).ready(function () {
 
         var drinkTemplate = Hogan.compile(
-            '<p class=drink>{{drink}}<span class="recipe">{{ingredients}}</span></p>'
+            '<p class=drink><a target="_blank" href="https://www.google.com/search?q=site:www.cocktaildb.com+{{drink}}">{{drink}}</a><span class="recipe">{{ingredients}}</span></p>'
         );
 
         var suggestedDrinkTemplate = Hogan.compile(
-            '<p class=suggesteddrink>{{drink}}<span class="recipe">{{ingredients}}</span></p>'
+            '<p class=suggesteddrink><a target="_blank" href="https://www.google.com/search?q=site:www.cocktaildb.com+{{drink}}">{{drink}}</a><span class="recipe">{{ingredients}}</span></p>'
         );
 
         //var ingredientTemplate = Hogan.compile(
