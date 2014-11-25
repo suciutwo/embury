@@ -33,6 +33,11 @@ def ingredients():
 @app.route('/search/')
 def search():
     owned = request.args.getlist('owned[]')
+    if owned:
+        # Partial list of garnishes
+        owned += ['lemon twist', 'olive', 'lemon', 'lime', 'orange', 'orange slice', 'lemon wedge', 'cherry', 'lemon slice', 'mint leaf']
+        # Partial list of home cooking ingredients
+        owned += ['sugar', 'molasses', 'cream', 'egg white', 'egg', 'food coloring', 'milk', 'water', 'ice', 'syrup', 'maple syrup']
     forbidden = request.args.getlist('forbidden[]')
     required = request.args.getlist('required[]')
     print owned, forbidden, required
