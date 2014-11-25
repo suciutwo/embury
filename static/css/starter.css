@@ -32,9 +32,18 @@ a:active {
   color: darkgray;
 }
 
-/*a:hover:visited {*/
-    /*color: darkgray;*/
-/*}*/
+
+.hiddenuntilhover {
+    color: transparent;
+}
+
+.hiddenuntilhover:hover  {
+    color: lightgray;
+}
+
+.hoverparent:hover .hiddenuntilhover {
+    color:lightgray;
+}
 
 
 

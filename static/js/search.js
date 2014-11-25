@@ -18,11 +18,19 @@ window.onload = function() {
         //);
 
         var ownedTemplate = Hogan.compile(
-            '<p class=haveitem>{{owned}}</p>'
+            '<p class="hoverparent haveitem">' +
+            '<span class="hiddenuntilhover hiddenplus">+&nbsp</span>' +
+            '<span class="itemtext">{{owned}}</span>' +
+            '<span class="hiddenuntilhover hiddenminus">&nbsp-</span>' +
+            '</p>'
         );
 
         var wantedTemplate = Hogan.compile(
-            '<p class=wantitem>{{want}}</p>'
+            '<p class="wantitem hoverparent">' +
+            '<span style="color: transparent">+&nbsp</span>' +
+            '<span class="itemtext">{{want}}</span>' +
+            '<span class="hiddenuntilhover hiddenminus">&nbsp-</span>' +
+            '</p>'
         );
 
         //function appendMissing(missing) {
@@ -34,15 +42,18 @@ window.onload = function() {
 
         function appendOwned(owned) {
             $('#have').append(ownedTemplate.render({owned: owned}));
-            $('.haveitem').click(function () {
-                $(this).remove()
+            $('.hiddenplus').click(function () {
+                appendWanted($(this).siblings('.itemtext').text());
+            });
+            $('.hiddenminus').click(function () {
+                $(this).parent().remove();
             });
         }
 
         function appendWanted(wanted) {
             $('#want').append(wantedTemplate.render({want: wanted}));
-            $('.wantitem').click(function () {
-                $(this).remove()
+            $('.hiddenminus').click(function () {
+                $(this).parent().remove();
             });
         }
 
@@ -55,13 +66,13 @@ window.onload = function() {
 
         function getOwnedIngredients() {
             return $('.haveitem').map(function () {
-                return $(this).text();
+                return $(this).children('.itemtext').text();
             }).get();
         }
 
         function getWantedIngredients() {
             return $('.wantitem').map(function () {
-                return $(this).text();
+                return $(this).children('.itemtext').text();
             }).get();
         }
 
