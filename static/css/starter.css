@@ -132,12 +132,12 @@ h3 {
 }
 .twitter-typeahead .tt-suggestion.tt-cursor {
     color: #fff;
-    background-color: #0081c2;
-    background-image: -moz-linear-gradient(top, #0088cc, #0077b3);
-    background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#0088cc), to(#0077b3));
-    background-image: -webkit-linear-gradient(top, #0088cc, #0077b3);
-    background-image: -o-linear-gradient(top, #0088cc, #0077b3);
-    background-image: linear-gradient(to bottom, #0088cc, #0077b3);
+    background-color: #C0392B;
+    background-image: -moz-linear-gradient(top, #C0392B, #C0392B);
+    background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#C0392B), to(#C0392B));
+    background-image: -webkit-linear-gradient(top, #C0392B, #C0392B);
+    background-image: -o-linear-gradient(top, #C0392B, #C0392B);
+    background-image: linear-gradient(to bottom, #C0392B, #C0392B);
     background-repeat: repeat-x;
     filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ff0088cc', endColorstr='#ff0077b3', GradientType=0);
 }
@@ -146,6 +146,11 @@ h3 {
 }
 .tt-suggestion p {
     margin: 0;
+    color: #272822;
+}
+
+.tt-suggestions strong {
+    color: #272822;
 }
 
 
