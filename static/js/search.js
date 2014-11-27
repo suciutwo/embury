@@ -89,7 +89,8 @@ window.onload = function() {
             $.ajax({
                     url: '/suggest/',
                     data: {
-                        owned: owned
+                        owned: owned,
+                        required: wanted
                     },
                     success: function (response) {
                         $('#buyMoreHeader').text("If you bought " + response.tobuy);

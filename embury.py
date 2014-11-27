@@ -30,17 +30,23 @@ def ingredients():
     return jsonify(ingredients=c.all_ingredients())
 
 
-@app.route('/search/')
-def search():
+def parse_request():
     owned = request.args.getlist('owned[]')
     if owned:
         # Partial list of garnishes
-        owned += ['lemon twist', 'olive', 'lemon', 'lime', 'orange', 'orange slice', 'lemon wedge', 'cherry', 'lemon slice', 'mint leaf']
+        owned += ['lemon twist', 'olive', 'lemon', 'lime', 'orange', 'orange slice', 'lemon wedge', 'cherry',
+                  'lemon slice', 'mint leaf']
         # Partial list of home cooking ingredients
-        owned += ['sugar', 'molasses', 'cream', 'egg white', 'egg', 'food coloring', 'milk', 'water', 'ice', 'syrup', 'maple syrup']
+        owned += ['sugar', 'molasses', 'cream', 'egg white', 'egg', 'food coloring', 'milk', 'water', 'ice', 'syrup',
+                  'maple syrup']
     forbidden = request.args.getlist('forbidden[]')
     required = request.args.getlist('required[]')
-    print owned, forbidden, required
+    return forbidden, owned, required
+
+
+@app.route('/search/')
+def search():
+    forbidden, owned, required = parse_request()
     result = c.search(owned=owned, required=required, forbidden=forbidden)
     number_to_return = min(10, len(result))
     random_selection = random.sample(result, number_to_return)
@@ -49,8 +55,8 @@ def search():
 
 @app.route('/suggest/')
 def suggest():
-    owned = request.args.getlist('owned[]')
-    result = c.flexible_search(liquor_on_shelf=owned, allowed_missing_elements=1)
+    forbidden, owned, required = parse_request()
+    result = c.flexible_search(owned=owned, required=required, allowed_missing_elements=1)
     suggestions = []
     tobuy = "I can't seem to find another drink you could make by buying a single ingredient."
     if result:
