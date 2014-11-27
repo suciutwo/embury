@@ -55,6 +55,10 @@ window.onload = function() {
             '<p class=suggesteddrink><a target="_blank" href="https://www.google.com/search?q=site:www.cocktaildb.com+{{drink}}">{{drink}}</a><span class="recipe">{{ingredients}}</span></p>'
         );
 
+        var buyMoreTemplate = Hogan.compile(
+            '<h3>If you buy {{tobuy}} </h3>'
+        );
+
         $('#search').click(function () {
             var suggestionBox = $('#suggestions');
             suggestionBox.empty();
@@ -84,7 +88,7 @@ window.onload = function() {
             });
 
 
-            var buyMoreBox = $('#buy');
+            var buyMoreBox = $('#buyMore');
             buyMoreBox.empty();
             $.ajax({
                     url: '/suggest/',
@@ -93,15 +97,20 @@ window.onload = function() {
                         required: wanted
                     },
                     success: function (response) {
-                        $('#buyMoreHeader').text("If you bought " + response.tobuy);
-
-                        $.map(response.cocktails, function (cocktail) {
-                            var ingredientString = $.map(cocktail.recipe, function(d) { return d.ingredient; })
-                                .join(', ');
-                            buyMoreBox.append(
-                                $(suggestedDrinkTemplate.render({drink: cocktail.name,
-                                    ingredients: ingredientString}))
-                            );
+                        $.map(response.suggestions, function (suggestion) {
+                            buyMoreBox.append($(buyMoreTemplate.render({tobuy: suggestion.tobuy})));
+                            $.map(suggestion.cocktails, function (cocktail) {
+                                var ingredientString = $.map(cocktail.recipe, function (d) {
+                                    return d.ingredient;
+                                })
+                                    .join(', ');
+                                buyMoreBox.append(
+                                    $(suggestedDrinkTemplate.render({
+                                        drink: cocktail.name,
+                                        ingredients: ingredientString
+                                    }))
+                                );
+                            });
                         });
                     },
                     error: function (error) {

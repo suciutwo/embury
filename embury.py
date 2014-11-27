@@ -56,14 +56,16 @@ def search():
 @app.route('/suggest/')
 def suggest():
     forbidden, owned, required = parse_request()
-    result = c.flexible_search(owned=owned, required=required, allowed_missing_elements=1)
+    result = c.flexible_search(owned, required=required, allowed_missing_elements=1)
     suggestions = []
-    tobuy = "I can't seem to find another drink you could make by buying a single ingredient."
     if result:
-        [tobuy, suggestions] = result[0]
-        tobuy = ', '.join(tobuy)
-        suggestions = [c.cocktail(name)._asdict() for name in suggestions]
-    return jsonify(cocktails=suggestions, tobuy=tobuy)
+        for tobuy, resulting_cocktail_names in result[:3]:
+            tobuy = ', '.join(tobuy)
+            resulting_cocktails = [c.cocktail(name)._asdict() for name in resulting_cocktail_names]
+            suggestions.append({'cocktails':resulting_cocktails, 'tobuy':tobuy})
+    else:
+        suggestions.append({'tobuy': "I can't seem to find another drink you could make by buying a single ingredient."})
+    return jsonify(suggestions=suggestions)
 
 
 @app.errorhandler(404)
