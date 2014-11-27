@@ -16,13 +16,33 @@ window.onload = function() {
         '</p>'
     );
 
-    function appendOwned(owned) {
-        $('#have').append(ownedTemplate.render({owned: owned}));
 
+    function getWantedIngredients() {
+        return $('.wantitem').map(function () {
+            return $(this).children('.itemtext').text();
+        }).get();
+    }
+
+    function getOwnedIngredients() {
+        return $('.haveitem').map(function () {
+            return $(this).children('.itemtext').text();
+        }).get();
+    }
+
+    function appendOwned(owned) {
+        if (owned === "") return;
+        var alreadyOwned = getOwnedIngredients();
+        if($.inArray(owned, alreadyOwned) === -1 ) {
+            $('#have').append(ownedTemplate.render({owned: owned}));
+        }
     }
 
     function appendWanted(wanted) {
-        $('#want').append(wantedTemplate.render({want: wanted}));
+        if (wanted === "") return;
+        var alreadyWanted = getWantedIngredients();
+        if ($.inArray(wanted, alreadyWanted) === -1) {
+            $('#want').append(wantedTemplate.render({want: wanted}));
+        }
     }
 
     $(document).ready(function () {
@@ -34,19 +54,6 @@ window.onload = function() {
         var suggestedDrinkTemplate = Hogan.compile(
             '<p class=suggesteddrink><a target="_blank" href="https://www.google.com/search?q=site:www.cocktaildb.com+{{drink}}">{{drink}}</a><span class="recipe">{{ingredients}}</span></p>'
         );
-
-
-        function getOwnedIngredients() {
-            return $('.haveitem').map(function () {
-                return $(this).children('.itemtext').text();
-            }).get();
-        }
-
-        function getWantedIngredients() {
-            return $('.wantitem').map(function () {
-                return $(this).children('.itemtext').text();
-            }).get();
-        }
 
         $('#search').click(function () {
             var suggestionBox = $('#suggestions');
