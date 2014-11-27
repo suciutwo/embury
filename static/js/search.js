@@ -1,4 +1,30 @@
 window.onload = function() {
+
+    var ownedTemplate = Hogan.compile(
+        '<p class="hoverparent haveitem">' +
+        '<span class="hiddenuntilhover hiddenplus">+&nbsp</span>' +
+        '<span class="itemtext">{{owned}}</span>' +
+        '<span class="hiddenuntilhover hiddenminus">&nbsp-</span>' +
+        '</p>'
+    );
+
+    var wantedTemplate = Hogan.compile(
+        '<p class="wantitem hoverparent">' +
+        '<span style="color: transparent">+&nbsp</span>' +
+        '<span class="itemtext">{{want}}</span>' +
+        '<span class="hiddenuntilhover hiddenminus">&nbsp-</span>' +
+        '</p>'
+    );
+
+    function appendOwned(owned) {
+        $('#have').append(ownedTemplate.render({owned: owned}));
+
+    }
+
+    function appendWanted(wanted) {
+        $('#want').append(wantedTemplate.render({want: wanted}));
+    }
+
     $(document).ready(function () {
 
         var drinkTemplate = Hogan.compile(
@@ -9,60 +35,6 @@ window.onload = function() {
             '<p class=suggesteddrink><a target="_blank" href="https://www.google.com/search?q=site:www.cocktaildb.com+{{drink}}">{{drink}}</a><span class="recipe">{{ingredients}}</span></p>'
         );
 
-        //var ingredientTemplate = Hogan.compile(
-        //    '<p class=ingredient>{{ingredient}}</p>'
-        //);
-
-        //var missingTemplate = Hogan.compile(
-        //    '<p class=missingitem>{{missing}}</p>'
-        //);
-
-        var ownedTemplate = Hogan.compile(
-            '<p class="hoverparent haveitem">' +
-            '<span class="hiddenuntilhover hiddenplus">+&nbsp</span>' +
-            '<span class="itemtext">{{owned}}</span>' +
-            '<span class="hiddenuntilhover hiddenminus">&nbsp-</span>' +
-            '</p>'
-        );
-
-        var wantedTemplate = Hogan.compile(
-            '<p class="wantitem hoverparent">' +
-            '<span style="color: transparent">+&nbsp</span>' +
-            '<span class="itemtext">{{want}}</span>' +
-            '<span class="hiddenuntilhover hiddenminus">&nbsp-</span>' +
-            '</p>'
-        );
-
-        //function appendMissing(missing) {
-        //    $('#missing').append(missingTemplate.render({missing: missing}));
-        //    $('.missingitem').click(function () {
-        //        $(this).remove()
-        //    });
-        //}
-
-        function appendOwned(owned) {
-            $('#have').append(ownedTemplate.render({owned: owned}));
-            $('.hiddenplus').click(function () {
-                appendWanted($(this).siblings('.itemtext').text());
-            });
-            $('.hiddenminus').click(function () {
-                $(this).parent().remove();
-            });
-        }
-
-        function appendWanted(wanted) {
-            $('#want').append(wantedTemplate.render({want: wanted}));
-            $('.hiddenminus').click(function () {
-                $(this).parent().remove();
-            });
-        }
-
-
-        //function getMissingIngredients() {
-        //    return $('.missingitem').map(function () {
-        //        return $(this).text();
-        //    }).get();
-        //}
 
         function getOwnedIngredients() {
             return $('.haveitem').map(function () {
@@ -79,7 +51,6 @@ window.onload = function() {
         $('#search').click(function () {
             var suggestionBox = $('#suggestions');
             suggestionBox.empty();
-            //var forbidden = getMissingIngredients();
             var wanted = getWantedIngredients();
             var owned = getOwnedIngredients().concat(wanted);
             console.log(owned);
@@ -99,19 +70,6 @@ window.onload = function() {
                             ingredients: ingredientString}))
                         );
                     });
-                    //$('.drink').click(function () {
-                    //    $('#drinkName').text($(this).text());
-                    //    var ingredientBox = $('#drinkIngredients').empty();
-                    //    var instructions = $(this).data("recipe");
-                    //    $.map(instructions, function (instruction) {
-                    //        ingredientBox.append(
-                    //            ingredientTemplate.render({ingredient: instruction.ingredient})
-                    //        );
-                    //    });
-                    //    $('.ingredient').click(function () {
-                    //        appendMissing($(this).text())
-                    //    });
-                    //});
                 },
                 error: function (error) {
                     console.log(error);
@@ -137,19 +95,6 @@ window.onload = function() {
                                     ingredients: ingredientString}))
                             );
                         });
-                        //$('.suggesteddrink').click(function () {
-                        //    $('#drinkName2').text($(this).text());
-                        //    var ingredientBox = $('#drinkIngredients2').empty();
-                        //    var ingredients = $(this).data("recipe");
-                        //    $.map(ingredients, function (instruction) {
-                        //        ingredientBox.append(
-                        //            ingredientTemplate.render({ingredient: instruction.ingredient})
-                        //        );
-                        //    });
-                        //    $('.ingredient').click(function () {
-                        //        appendMissing($(this).text())
-                        //    });
-                        //});
                     },
                     error: function (error) {
                         console.log(error);
@@ -159,12 +104,6 @@ window.onload = function() {
 
         });
 
-
-        //$('#missingbutton').click(function () {
-        //    var input = $('#missinginput');
-        //    appendMissing(input.val());
-        //    input.typeahead('val', '');
-        //});
 
         $('#havebutton').click(function () {
             var input = $('#haveinput');
@@ -206,18 +145,23 @@ window.onload = function() {
             }
         );
 
-        $("#haveinput").on('typeahead:selected', function (e, data) {
+        $("#haveinput").on('typeahead:selected', function () {
             $('#havebutton').click();
         });
 
-        $("#wantinput").on('typeahead:selected', function (e, data) {
+        $("#wantinput").on('typeahead:selected', function () {
             $('#wantbutton').click();
         });
-
-        //$("#missinginput").on('typeahead:selected', function (e, data) {
-        //    $('#missingbutton').click();
-        //});
-
-
     });
+
+
+    $(document).on("click", '.hiddenplus', function() {
+        appendWanted($(this).siblings('.itemtext').text());
+    });
+
+
+    $(document).on("click", '.hiddenminus', function() {
+        $(this).parent().remove();
+    });
+
 };
