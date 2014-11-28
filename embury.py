@@ -17,24 +17,18 @@ app = Flask(__name__)
 app.config['DEBUG'] = os.environ.get('DEBUG', False)
 app.jinja_env.add_extension('pyjade.ext.jinja.PyJadeExtension')
 app.secret_key = os.environ.get('APP_SECRET_KEY')
-session.permanent = True
 
 c = CocktailDirectory()
 
 
-@app.route('/login', methods=['GET', 'POST'])
+@app.route('/login/', methods=['POST'])
 def login():
     if request.method == 'POST':
         session['username'] = request.form['username']
+        session.permanent = True
         return redirect(url_for('index'))
-    return '''
-        <form action="" method="post">
-            <p><input type=text name=username>
-            <p><input type=submit value=Login>
-        </form>
-    '''
 
-@app.route('/logout')
+@app.route('/logout/')
 def logout():
     # remove the username from the session if it's there
     session.pop('username', None)
@@ -43,9 +37,8 @@ def logout():
 
 @app.route('/')
 def index():
-    if 'username' in session:
-        return 'Logged in as %s' % escape(session['username'])
-    return render_template('index.jade')
+    logged_in = 'username' in session
+    return render_template('index.jade', logged_in=logged_in)
 
 
 @app.route('/about/')
