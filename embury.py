@@ -21,6 +21,13 @@ app.jinja_env.add_extension('pyjade.ext.jinja.PyJadeExtension')
 app.secret_key = os.environ.get('APP_SECRET_KEY')
 db = SQLAlchemy(app)
 
+
+class User(db.Model):
+    __tablename__ = "users"
+    username = db.Column(db.String(120), primary_key=True)
+    drinks = db.Column(db.String(500))
+
+
 c = CocktailDirectory()
 
 
