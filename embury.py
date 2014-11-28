@@ -3,20 +3,47 @@
 import os
 import random
 from flask import Flask
-from flask import render_template
+from flask import escape
 from flask import jsonify
+from flask import redirect
+from flask import render_template
 from flask import request
+from flask import session
+from flask import url_for
 from src.CocktailDirectory import CocktailDirectory
 
 
 app = Flask(__name__)
 app.config['DEBUG'] = os.environ.get('DEBUG', False)
 app.jinja_env.add_extension('pyjade.ext.jinja.PyJadeExtension')
+app.secret_key = os.environ.get('APP_SECRET_KEY')
 
 c = CocktailDirectory()
 
+
+@app.route('/login', methods=['GET', 'POST'])
+def login():
+    if request.method == 'POST':
+        session['username'] = request.form['username']
+        return redirect(url_for('index'))
+    return '''
+        <form action="" method="post">
+            <p><input type=text name=username>
+            <p><input type=submit value=Login>
+        </form>
+    '''
+
+@app.route('/logout')
+def logout():
+    # remove the username from the session if it's there
+    session.pop('username', None)
+    return redirect(url_for('index'))
+
+
 @app.route('/')
 def index():
+    if 'username' in session:
+        return 'Logged in as %s' % escape(session['username'])
     return render_template('index.jade')
 
 
