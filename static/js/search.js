@@ -46,6 +46,10 @@ window.onload = function() {
     }
 
     $(document).ready(function () {
+        $.map(saved_ingredients, appendOwned);
+    });
+
+    $(document).ready(function () {
 
         var drinkTemplate = Hogan.compile(
             '<p class=drink><a target="_blank" href="https://www.google.com/search?q=site:www.cocktaildb.com+{{drink}}">{{drink}}</a><span class="recipe">{{ingredients}}</span></p>'
@@ -64,7 +68,6 @@ window.onload = function() {
             suggestionBox.empty();
             var wanted = getWantedIngredients();
             var owned = getOwnedIngredients().concat(wanted);
-            console.log(owned);
             $.ajax({
                 url: '/search/',
                 data: {
@@ -174,6 +177,21 @@ window.onload = function() {
 
     $(document).on("click", '.hiddenplus', function() {
         appendWanted($(this).siblings('.itemtext').text());
+    });
+
+
+    $(document).on("click", '#save', function() {
+        var owned = getOwnedIngredients();
+        $.ajax({
+                url: '/save/',
+                data: {
+                    owned: owned
+                },
+                error: function (error) {
+                    console.log(error);
+                }
+            }
+        );
     });
 
 

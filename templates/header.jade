@@ -25,14 +25,7 @@ html(lang="en")
           ul.nav.navbar-nav
             li
               a(href="/about/") About
-          if logged_in
-            form.navbar-form.navbar-right(method="get", action="/logout/", role="form")
-              button.btn.btn-flat(type="submit") Forget Me
-          else
-            form.navbar-form.navbar-right(method="post", action="/login/", role="form")
-              .form-group
-                input.form-control(type="text", placeholder="Name", name="username")
-              button.btn.btn-flat(type="submit") Remember Me
+          block navbar
 
 
 

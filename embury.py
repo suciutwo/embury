@@ -1,9 +1,9 @@
 #!/Users/andrewbackup/Desktop/embury/emburyenv/bin/python
 
 import os
+import json
 import random
 from flask import Flask
-from flask import escape
 from flask import jsonify
 from flask import redirect
 from flask import render_template
@@ -23,27 +23,31 @@ c = CocktailDirectory()
 
 @app.route('/login/', methods=['POST'])
 def login():
-    if request.method == 'POST':
-        session['username'] = request.form['username']
-        session.permanent = True
-        return redirect(url_for('index'))
+    session['username'] = request.form['username']
+    session.permanent = True
+    return redirect(url_for('index'))
+
 
 @app.route('/logout/')
 def logout():
-    # remove the username from the session if it's there
     session.pop('username', None)
+    session.pop('owned_ingredients', None)
     return redirect(url_for('index'))
 
 
 @app.route('/')
 def index():
     logged_in = 'username' in session
-    return render_template('index.jade', logged_in=logged_in)
+    name = session.get('username', '')
+    owned_ingredients = session.get('owned_ingredients', [])
+    owned_ingredients = json.dumps(owned_ingredients)
+    return render_template('index.jade', logged_in=logged_in, owned_ingredients=owned_ingredients, name=name)
 
 
 @app.route('/about/')
 def about():
-    return render_template('about.jade')
+    logged_in = 'username' in session
+    return render_template('about.jade', logged_in=logged_in)
 
 
 @app.route('/ingredients/')
@@ -87,6 +91,16 @@ def suggest():
     else:
         suggestions.append({'tobuy': "I can't seem to find another drink you could make by buying a single ingredient."})
     return jsonify(suggestions=suggestions)
+
+
+@app.route('/save/')
+def save():
+    if 'username' in session:
+        owned = request.args.getlist('owned[]')
+        session['owned_ingredients'] = owned
+        return "Saved!"
+    else:
+        return "No harm no foul, but I didn't save because you're not logged in."
 
 
 @app.errorhandler(404)

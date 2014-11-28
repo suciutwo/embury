@@ -1,5 +1,16 @@
 extends ./header.jade
 
+block navbar
+  if logged_in
+    form.navbar-form.navbar-right(method="get", action="/logout/", role="form")
+      button.btn.btn-flat#save(type="button") Remember My Shelf
+      button.btn.btn-flat(type="submit") Forget #{name}
+  else
+    form.navbar-form.navbar-right(method="post", action="/login/", role="form")
+      .form-group
+        input.form-control(type="text", placeholder="Name", name="username")
+      button.btn.btn-flat(type="submit") Remember Me
+
 block content
   .container.starter-template
     .row
@@ -12,6 +23,7 @@ block content
     .row
       .col-sm-12
         #have
+
     .row
       .col-sm-4
       .col-sm-3
@@ -36,4 +48,6 @@ block content
       .col-sm-2
 
 block scripts
+  script.
+    saved_ingredients=#{owned_ingredients}
   script(src="/static/js/search.js")
