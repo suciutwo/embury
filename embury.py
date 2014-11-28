@@ -17,6 +17,7 @@ app = Flask(__name__)
 app.config['DEBUG'] = os.environ.get('DEBUG', False)
 app.jinja_env.add_extension('pyjade.ext.jinja.PyJadeExtension')
 app.secret_key = os.environ.get('APP_SECRET_KEY')
+session.permanent = True
 
 c = CocktailDirectory()
 
