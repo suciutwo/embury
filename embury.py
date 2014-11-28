@@ -59,7 +59,7 @@ def parse_request():
     owned = request.args.getlist('owned[]')
     if owned:
         # Partial list of garnishes
-        owned += ['lemon twist', 'olive', 'lemon', 'lime', 'orange', 'orange slice', 'lemon wedge', 'cherry',
+        owned += ['lemon twist', 'olive', 'lemon', 'lime', 'orange', 'orange slice', 'lemon wedge', 'cherry', 'green cherry'
                   'lemon slice', 'mint leaf']
         # Partial list of home cooking ingredients
         owned += ['sugar', 'molasses', 'cream', 'egg white', 'egg', 'food coloring', 'milk', 'water', 'ice', 'syrup',
