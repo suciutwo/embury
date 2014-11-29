@@ -22,10 +22,19 @@ app.secret_key = os.environ.get('APP_SECRET_KEY')
 db = SQLAlchemy(app)
 
 
-class User(db.Model):
-    __tablename__ = "users"
-    username = db.Column(db.String(120), primary_key=True)
-    drinks = db.Column(db.String(500))
+class UserDrink(db.Model):
+    __tablename__ = "user_drink"
+    id = db.Column(db.Integer, primary_key=True)
+    username = db.Column(db.String())  # TODO make user names be 50 char or less
+    drink = db.Column(db.String())
+
+    def __init__(self, username, drink):
+        self.username = username
+        self.drink = drink
+
+    def __repr__(self):
+        return '<id {}>'.format(self.id)
+
 
 
 c = CocktailDirectory()
@@ -41,7 +50,6 @@ def login():
 @app.route('/logout/')
 def logout():
     session.pop('username', None)
-    session.pop('owned_ingredients', None)
     return redirect(url_for('index'))
 
 
@@ -49,8 +57,11 @@ def logout():
 def index():
     logged_in = 'username' in session
     name = session.get('username', '')
-    owned_ingredients = session.get('owned_ingredients', [])
-    owned_ingredients = json.dumps(owned_ingredients)
+    owned_ingredients = []
+    if logged_in:
+        owned_ingredients = UserDrink.query.filter_by(username=name).all()
+        owned_ingredients = [i.drink for i in owned_ingredients]
+        owned_ingredients = json.dumps(owned_ingredients)
     return render_template('index.jade', logged_in=logged_in, owned_ingredients=owned_ingredients, name=name)
 
 
@@ -106,8 +117,25 @@ def suggest():
 @app.route('/save/')
 def save():
     if 'username' in session:
-        owned = request.args.getlist('owned[]')
-        session['owned_ingredients'] = owned
+        name = session['username']
+        db_items = UserDrink.query.filter_by(username=name).all()
+        already_in = {dbitem.drink for dbitem in db_items}
+
+        current_ingredients = request.args.getlist('owned[]')
+        current_ingredients = {item for item in current_ingredients}
+
+        to_create = current_ingredients - already_in
+
+        to_delete = already_in - current_ingredients
+
+        for item in db_items:
+            if item.drink in to_delete:
+                db.session.delete(item)
+
+        for ingredient in to_create:
+            user_drink = UserDrink(name, ingredient)
+            db.session.add(user_drink)
+        db.session.commit()
         return "Saved!"
     else:
         return "No harm no foul, but I didn't save because you're not logged in."
