@@ -36,7 +36,6 @@ class UserDrink(db.Model):
         return '<id {}>'.format(self.id)
 
 
-
 c = CocktailDirectory()
 
 
@@ -61,6 +60,7 @@ def index():
     if logged_in:
         owned_ingredients = UserDrink.query.filter_by(username=name).all()
         owned_ingredients = [i.drink for i in owned_ingredients]
+        owned_ingredients.sort()
         owned_ingredients = json.dumps(owned_ingredients)
     return render_template('index.jade', logged_in=logged_in, owned_ingredients=owned_ingredients, name=name)
 
