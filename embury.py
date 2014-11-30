@@ -119,22 +119,13 @@ def save():
     if 'username' in session:
         name = session['username']
         db_items = UserDrink.query.filter_by(username=name).all()
-        already_in = {dbitem.drink for dbitem in db_items}
-
+        already_in = {db_item.drink for db_item in db_items}
         current_ingredients = request.args.getlist('owned[]')
         current_ingredients = {item for item in current_ingredients}
-
         to_create = current_ingredients - already_in
-
         to_delete = already_in - current_ingredients
-
-        for item in db_items:
-            if item.drink in to_delete:
-                db.session.delete(item)
-
-        for ingredient in to_create:
-            user_drink = UserDrink(name, ingredient)
-            db.session.add(user_drink)
+        [db.session.delete(item) for item in db_items if item.drink in to_delete]
+        [db.session.add(UserDrink(name, ingredient)) for ingredient in to_create]
         db.session.commit()
         return "Saved!"
     else:
