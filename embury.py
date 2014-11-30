@@ -25,7 +25,7 @@ db = SQLAlchemy(app)
 class UserDrink(db.Model):
     __tablename__ = "user_drink"
     id = db.Column(db.Integer, primary_key=True)
-    username = db.Column(db.String())  # TODO make user names be 50 char or less
+    username = db.Column(db.String())
     drink = db.Column(db.String())
 
     def __init__(self, username, drink):
@@ -102,7 +102,10 @@ def search():
 @app.route('/suggest/')
 def suggest():
     forbidden, owned, required = parse_request()
-    result = c.flexible_search(owned, required=required, allowed_missing_elements=1)
+    for i in xrange(1, 4):
+        result = c.flexible_search(owned, required=required, allowed_missing_elements=i)
+        if len(result) > 3 and len(result[0]) > 3:
+            break
     suggestions = []
     if result:
         for tobuy, resulting_cocktail_names in result[:3]:
@@ -110,7 +113,7 @@ def suggest():
             resulting_cocktails = [c.cocktail(name)._asdict() for name in resulting_cocktail_names]
             suggestions.append({'cocktails':resulting_cocktails, 'tobuy':tobuy})
     else:
-        suggestions.append({'tobuy': "I can't seem to find another drink you could make by buying a single ingredient."})
+        suggestions.append({'tobuy': ""})
     return jsonify(suggestions=suggestions)
 
 
