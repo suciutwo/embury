@@ -104,7 +104,7 @@ def suggest():
     forbidden, owned, required = parse_request()
     for i in xrange(1, 4):
         result = c.flexible_search(owned, required=required, allowed_missing_elements=i)
-        if len(result) > 3 and len(result[0]) > 3:
+        if len(result) >= 2 and len(result[0]) >= 3:
             break
     suggestions = []
     if result:
