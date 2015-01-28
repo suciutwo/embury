@@ -6,9 +6,11 @@ block content
       p.lead
 block scripts
   script.
-    var flavorTexts = ["You've had one too many.", "Last call.",
-    "You try to catch the bartender's eye. She doesn't notice.",
-    "You try to catch the bartender's eye. He doesn't notice."];
-    randomIndex = Math.floor(Math.random() * flavorTexts.length);
-    var flavorText = flavorTexts[randomIndex];
-    $(".lead").text(flavorText);
+    window.onload = function() {
+      var flavorTexts = ["You've had one too many.", "Last call.",
+        "You try to catch the bartender's eye. She doesn't notice.",
+        "You try to catch the bartender's eye. He doesn't notice."];
+      randomIndex = Math.floor(Math.random() * flavorTexts.length);
+      var flavorText = flavorTexts[randomIndex];
+      $(".lead").text(flavorText);
+    }
