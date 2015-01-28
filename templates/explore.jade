@@ -1,0 +1,13 @@
+extends ./header.jade
+block content
+    .container.starter-template
+        .row
+            .col-sm-10
+                .d3container
+            .col-sm-2
+                #leaf-node-results
+
+block scripts
+    link(href="/static/css/tree.css" rel="stylesheet")
+    script(src="http://d3js.org/d3.v3.min.js")
+    script(src="/static/js/explore-tree.js")

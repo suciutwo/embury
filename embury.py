@@ -70,6 +70,11 @@ def about():
     logged_in = 'username' in session
     return render_template('about.jade', logged_in=logged_in)
 
+@app.route('/explore/')
+def explore():
+    logged_in = 'username' in session
+    return render_template('explore.jade', logged_in=logged_in)
+
 
 @app.route('/ingredients/')
 def ingredients():
