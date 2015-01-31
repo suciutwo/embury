@@ -56,7 +56,7 @@ window.onload = function() {
                     .render({'drink': drink})
             )
         });
-        sidebar.show("slide");
+        sidebar.show("slide", duration);
     }
     
     function update(source) {
