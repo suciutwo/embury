@@ -2,6 +2,8 @@ Flask==0.10.1
 Jinja2==2.7.3
 MarkupSafe==0.23
 Werkzeug==0.9.6
+numpy==1.8.1
+scipy==0.14.0
 https://s3.amazonaws.com/suciutwo/cocktails/cocktails-0.4.1.tar.gz
 gunicorn==19.1.1
 itsdangerous==0.24
