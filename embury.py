@@ -23,6 +23,9 @@ db = SQLAlchemy(app)
 
 
 class UserDrink(db.Model):
+    """
+    User/Drink pairs keep a record of which users have which drinks on their shelves.
+    """
     __tablename__ = "user_drink"
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String())
@@ -36,7 +39,7 @@ class UserDrink(db.Model):
         return '<id {}>'.format(self.id)
 
 
-c = CocktailDirectory()
+c = CocktailDirectory()  # Single instance so that we don't have to reload
 
 
 @app.route('/login/', methods=['POST'])
@@ -69,6 +72,7 @@ def index():
 def about():
     logged_in = 'username' in session
     return render_template('about.jade', logged_in=logged_in)
+
 
 @app.route('/explore/')
 def explore():
@@ -107,16 +111,18 @@ def search():
 @app.route('/suggest/')
 def suggest():
     forbidden, owned, required = parse_request()
-    for i in xrange(1, 4):
-        result = c.flexible_search(owned, required=required, allowed_missing_elements=i)
-        if len(result) >= 2 and len(result[0]) >= 3:
+    result = None
+    for max_suggested_ingredients in xrange(1, 4):
+        result = c.flexible_search(owned, required=required, allowed_missing_elements=max_suggested_ingredients)
+        have_enough_suggested_drinks = len(result) >= 2 and len(result[0]) >= 3
+        if have_enough_suggested_drinks:
             break
     suggestions = []
     if result:
-        for tobuy, resulting_cocktail_names in result[:3]:
-            tobuy = ', '.join(tobuy)
+        for to_buy, resulting_cocktail_names in result[:3]:
+            to_buy = ', '.join(to_buy)
             resulting_cocktails = [c.cocktail(name)._asdict() for name in resulting_cocktail_names]
-            suggestions.append({'cocktails':resulting_cocktails, 'tobuy':tobuy})
+            suggestions.append({'cocktails': resulting_cocktails, 'tobuy':to_buy})
     else:
         suggestions.append({'tobuy': ""})
     return jsonify(suggestions=suggestions)
@@ -127,9 +133,9 @@ def save():
     if 'username' in session:
         name = session['username']
         db_items = UserDrink.query.filter_by(username=name).all()
-        already_in = {db_item.drink for db_item in db_items}
         current_ingredients = request.args.getlist('owned[]')
         current_ingredients = {item for item in current_ingredients}
+        already_in = {db_item.drink for db_item in db_items}
         to_create = current_ingredients - already_in
         to_delete = already_in - current_ingredients
         [db.session.delete(item) for item in db_items if item.drink in to_delete]
