@@ -16,9 +16,9 @@ from src.CocktailDirectory import CocktailDirectory
 
 app = Flask(__name__)
 app.config['DEBUG'] = os.environ.get('DEBUG', False)
-app.config['SQLALCHEMY_DATABASE_URI'] = os.environ['DATABASE_URL']
+# app.config['SQLALCHEMY_DATABASE_URI'] = os.environ['DATABASE_URL']
 app.jinja_env.add_extension('pyjade.ext.jinja.PyJadeExtension')
-app.secret_key = os.environ.get('APP_SECRET_KEY')
+# app.secret_key = os.environ.get('APP_SECRET_KEY')
 db = SQLAlchemy(app)
 
 

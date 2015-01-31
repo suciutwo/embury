@@ -45,14 +45,17 @@ window.onload = function() {
         }
     }
 
+    //Clear out the #leaf-node-results and fill with 25 of the passed drinks
     function populateSidebarWithDrinks(drinks) {
-        $('#leaf-node-results').empty();
-        $.map(drinks, function (drink) {
-            $('#leaf-node-results')
-                .append(drinkTemplate
+        var sidebar = $('#leaf-node-results');
+        sidebar.empty().hide();
+        var shuffled_drinks = d3.shuffle(drinks).slice(0, 25);
+        $.map(shuffled_drinks, function (drink) {
+            sidebar.append(drinkTemplate
                     .render({'drink': drink})
             )
         });
+        sidebar.show("slide");
     }
     
     function update(source) {
@@ -173,13 +176,19 @@ window.onload = function() {
             //d._children = d.children;
             //d.children = null;
         } else { //extend!
-            if (d.drinks) populateSidebarWithDrinks(d.drinks);
+            if (d.drinks) {
+                populateSidebarWithDrinks(d.drinks);
+            }
             d.children = d._children;
             d._children = null;
         }
         update(d);
         
-        setTimeout(function() {if (d.children && d.children.length == 1) click(d.children[0]);}, duration);
+        setTimeout(function() {
+            if (d.children && d.children.length == 1) {
+                click(d.children[0]);
+            }
+        }, duration);
         
     }
-}
+};
