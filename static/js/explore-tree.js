@@ -49,7 +49,8 @@ window.onload = function() {
     function populateSidebarWithDrinks(drinks) {
         var sidebar = $('#leaf-node-results');
         sidebar.empty().hide();
-        var shuffled_drinks = d3.shuffle(drinks).slice(0, 25);
+        var shuffled_drinks = drinks.slice();
+        var shuffled_drinks = d3.shuffle(shuffled_drinks).slice(0, 25);
         $.map(shuffled_drinks, function (drink) {
             sidebar.append(drinkTemplate
                     .render({'drink': drink})
@@ -83,11 +84,17 @@ window.onload = function() {
             })
             .on("click", click);
 
+        var nodeColorPicker = function (d) {
+            if (d.drinks && d.drinks[0] != selected_node) {
+                return "#272822";
+            }
+            return d._children ? "#272822" : "#E74C3C";
+        };
+        
         nodeEnter.append("circle")
             .attr("r", 1e-6)
-            .style("fill", function (d) {
-                return d._children ? "#272822" : "#E74C3C";
-            });
+            .style("fill", nodeColorPicker);
+        
 
         nodeEnter.append("text")
             .attr("x", function (d) {
@@ -113,9 +120,7 @@ window.onload = function() {
 
         nodeUpdate.select("circle")
             .attr("r", 4.5)
-            .style("fill", function (d) {
-                return d._children ? "#272822" : "#E74C3C";
-            });
+            .style("fill", nodeColorPicker);
 
         nodeUpdate.select("text")
             .style("fill-opacity", 1);
@@ -169,6 +174,8 @@ window.onload = function() {
         });
     }
 
+    var selected_node = null;
+    
 // Toggle children on click.
     function click(d) {
         if (d.children) { //collapse!
@@ -177,13 +184,14 @@ window.onload = function() {
             //d.children = null;
         } else { //extend!
             if (d.drinks) {
+                selected_node = d.drinks[0];
                 populateSidebarWithDrinks(d.drinks);
             }
             d.children = d._children;
             d._children = null;
         }
         update(d);
-        
+
         setTimeout(function() {
             if (d.children && d.children.length == 1) {
                 click(d.children[0]);
