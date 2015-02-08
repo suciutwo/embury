@@ -16,8 +16,18 @@ function scriptNode(src) {
     return script;
 }
 
-var cloudflarepath = ['jquery/1.9.1/', 'twitter-bootstrap/3.3.0/js/', '/typeahead.js/0.10.4/', 'hogan.js/3.0.2/', 'jqueryui/1.11.2/'];
-var requirements = ["jquery.min.js", "bootstrap.min.js", "typeahead.bundle.js", "hogan.min.js", "jquery-ui.min.js"];
+var cloudflarepath = ['jquery/1.9.1/', 
+                      'twitter-bootstrap/3.3.0/js/', 
+                      'typeahead.js/0.10.4/',
+                      'hogan.js/3.0.2/',
+                      'jqueryui/1.11.2/',
+                      'd3/3.5.3/'];
+var requirements = ["jquery.min.js", 
+                    "bootstrap.min.js", 
+                    "typeahead.bundle.js", 
+                    "hogan.min.js", 
+                    "jquery-ui.min.js",
+                    "d3.min.js"];
 
 for (var i = 0; i < requirements.length; i++) {
     var script = scriptNode(scriptTag(cloudflarepath[i], requirements[i]));
