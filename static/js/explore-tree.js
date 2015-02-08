@@ -65,9 +65,14 @@ window.onload = function() {
         var nodes = tree.nodes(root).reverse(),
             links = tree.links(nodes);
 
-        // Normalize for fixed-depth.
+        
+        // Recompute depth so the tree fits in the window.
+        var max_depth = d3.max(nodes, function(d) {
+            return d.depth;
+        });
+        var width_for_level = width / max_depth;
         nodes.forEach(function (d) {
-            d.y = d.depth * 180;
+            d.y = d.depth * width_for_level;
         });
 
         // Update the nodes…
