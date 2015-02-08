@@ -50,7 +50,7 @@ window.onload = function() {
         var sidebar = $('#leaf-node-results');
         sidebar.empty().hide();
         var shuffled_drinks = drinks.slice();
-        var shuffled_drinks = d3.shuffle(shuffled_drinks).slice(0, 25);
+        shuffled_drinks = d3.shuffle(shuffled_drinks).slice(0, 25);
         $.map(shuffled_drinks, function (drink) {
             sidebar.append(drinkTemplate
                     .render({'drink': drink})
