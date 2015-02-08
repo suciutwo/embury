@@ -112,7 +112,7 @@ window.onload = function() {
             .text(function (d) {
                 if (d.question) return d.question;
                 if (d.title) return d.title;
-                return "->";
+                return "";
             })
             .style("fill-opacity", 1e-6);
 
